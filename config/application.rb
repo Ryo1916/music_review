@@ -27,7 +27,16 @@ module App
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    # Don't generate system test files.
-    config.generators.system_tests = nil
+    # Don't generate routes, system test files, stylesheets, javascripts.
+    config.generators do |g|
+      g.skip_routes false
+      g.stylesheets false
+      g.javascripts false
+      g.system_tests false
+      g.test_framework :rspec,
+                       fixtures: false,
+                       view_specs: false,
+                       routing_specs: false
+    end
   end
 end
