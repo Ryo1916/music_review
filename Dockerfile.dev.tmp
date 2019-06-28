@@ -1,0 +1,41 @@
+FROM ruby:2.6-alpine as builder
+ENV APP_ROOT /opt/app
+RUN mkdir -p $APP_ROOT
+WORKDIR $APP_ROOT
+COPY Gemfile $APP_ROOT/Gemfile
+COPY Gemfile.lock $APP_ROOT/Gemfile.lock
+RUN apk update \
+  && apk upgrade \
+  && apk add --update --no-cache bash           \
+                                 git            \
+                                 gmp-dev        \
+				 openssh        \
+                                 nodejs-current \
+				 nodejs-npm     \
+				 postgresql     \
+				 python2        \
+				 tzdata         \
+				 yaml           \
+				 yarn           \
+  && apk add --update --no-cache --virtual build-dependencies \
+                                           build-base         \
+				           curl-dev           \
+					   gcc                \
+					   libc-dev           \
+					   libxml2-dev        \
+					   libxslt-dev        \
+					   linux-headers      \
+					   make               \
+					   postgresql-dev     \
+  && gem install bundler \
+  && bundle install -j4  \
+  && apk del build-dependencies
+
+FROM ruby:2.6-alpine
+ENV LANG C.UTF-8
+ENV APP_ROOT /opt/app
+RUN mkdir -p $APP_ROOT
+WORKDIR $APP_ROOT
+COPY --from=builder $APP_ROOT $APP_ROOT
+COPY . $APP_ROOT
+CMD ["rails", "server", "-b", "0.0.0.0"]
