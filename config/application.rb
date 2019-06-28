@@ -38,5 +38,8 @@ module App
                        view_specs: false,
                        routing_specs: false
     end
+
+    # Set default time zone
+    config.time_zone = 'Tokyo'
   end
 end
