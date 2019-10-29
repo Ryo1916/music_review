@@ -31,7 +31,7 @@ gem 'i18n-tasks',           '0.9.25'
 gem 'rails-i18n',           '5.1.1'
 
 # account
-gem 'devise', '4.6.2'
+gem 'devise', '4.7.1'
 
 # seo
 gem 'meta-tags',         '2.11.1'
